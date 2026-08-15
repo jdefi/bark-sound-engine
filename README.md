@@ -11,8 +11,8 @@ Instead of building a simple text wrapper, this project explores the intersectio
 
 ## 🚀 Live Demo & Submission
 
-* **Live Web App:** [Insert deployment link, e.g., Vercel]
-* **Official DEV.to Submission:** [Insert your DEV.to post link]
+* **Live Web App:** https://bark-sound-engine.vercel.app/
+* **Official DEV.to Submission:** https://dev.to/joop-t/testing-new-ai-capabilities-our-dev-challenge-submission-2icd
 
 ---
 
