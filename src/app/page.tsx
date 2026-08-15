@@ -33,7 +33,10 @@ export default function Home() {
 
   return (
     <main style={{ maxWidth: '500px', margin: '50px auto', padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: '24px', marginBottom: '5px' }}>&#x1F43E; BarkTranslator Pro</h1>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '5px' }}>
+        <img src="/icon.svg" alt="BarkTranslator" width="32" height="32" />
+        <h1 style={{ fontSize: '24px', margin: 0 }}>BarkTranslator Pro</h1>
+      </div>
       <p style={{ color: '#666', marginBottom: '30px' }}>Translate human scenarios into realistic dog bark audio using AI</p>
 
       <form onSubmit={handleTranslate} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
