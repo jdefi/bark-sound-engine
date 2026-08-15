@@ -1,6 +1,30 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 
+const MODELS = [
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3.1-flash-lite',
+  'gemini-3.5-flash',
+  'gemini-3-flash-preview',
+  'gemini-3.6-flash',
+  'gemini-3.7-flash',
+  'gemini-flash-latest',
+];
+
+async function generatePrompt(ai: GoogleGenAI, prompt: string): Promise<string> {
+  for (const model of MODELS) {
+    try {
+      const response = await ai.models.generateContent({ model, contents: prompt });
+      const text = response.text?.trim();
+      if (text) return text;
+    } catch {
+      console.log(`Model ${model} failed, trying next...`);
+    }
+  }
+  throw new Error('All Gemini models failed');
+}
+
 export async function POST(request: Request) {
   try {
     const { breed, scenario } = await request.json();
@@ -27,18 +51,10 @@ Focus heavily on pitch, intensity, distance, and acoustic emotion. Include breed
 Example output: A sharp, high-pitched, excited yip of a small terrier echoing in a narrow alley.
 Only return the prompt text, nothing else.`;
 
-    const geminiResponse = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-lite',
-      contents: geminiPrompt,
-    });
-
-    const refinedAudioPrompt = geminiResponse.text?.trim();
-    if (!refinedAudioPrompt) {
-      return NextResponse.json({ error: 'Failed to generate audio prompt from Gemini' }, { status: 502 });
-    }
+    const refinedAudioPrompt = await generatePrompt(ai, geminiPrompt);
 
     // Step 2: Generate sound effect via ElevenLabs
-    const elevenLabsResponse = await fetch('https://api.elevenlabs.io/v1/sound-effects', {
+    const elevenLabsResponse = await fetch('https://api.elevenlabs.io/v1/sound-generation', {
       method: 'POST',
       headers: {
         'xi-api-key': process.env.ELEVEN_API_KEY,
@@ -60,9 +76,7 @@ Only return the prompt text, nothing else.`;
     // Step 3: Stream audio buffer to frontend
     const audioBuffer = await elevenLabsResponse.arrayBuffer();
     return new NextResponse(audioBuffer, {
-      headers: {
-        'Content-Type': 'audio/mpeg',
-      },
+      headers: { 'Content-Type': 'audio/mpeg' },
     });
 
   } catch (error: unknown) {
