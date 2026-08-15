@@ -1,13 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 
 export default function Home() {
-  const [breed, setBreed] = useState('Golden Retriever');
-  const [scenario, setScenario] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
+  const [breed, setBreed] = useState<string>('Golden Retriever');
+  const [scenario, setScenario] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
-  const handleTranslate = async (e) => {
+  const handleTranslate = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setAudioUrl(null);
@@ -24,8 +24,8 @@ export default function Home() {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
-    } catch (err) {
-      alert(err.message);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
