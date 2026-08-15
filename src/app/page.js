@@ -5,9 +5,9 @@ export default function Home() {
   const [breed, setBreed] = useState('Golden Retriever');
   const [scenario, setScenario] = useState('');
   const [loading, setLoading] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioUrl, setAudioUrl] = useState(null);
 
-  const handleTranslate = async (e: React.FormEvent) => {
+  const handleTranslate = async (e) => {
     e.preventDefault();
     setLoading(true);
     setAudioUrl(null);
@@ -21,11 +21,10 @@ export default function Home() {
 
       if (!res.ok) throw new Error('Failed to synthesize sound.');
 
-      // Convert the incoming API binary stream into a playable blob URL
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
-    } catch (err: any) {
+    } catch (err) {
       alert(err.message);
     } finally {
       setLoading(false);
@@ -64,7 +63,7 @@ export default function Home() {
           disabled={loading}
           style={{ padding: '12px', background: '#0070f3', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}
         >
-          {loading ? 'Synthesizing SFX...' : 'Generate Bark Audio &#x1F43E;'}
+          {loading ? 'Synthesizing SFX...' : 'Generate Bark Audio \u{1F43E}'}
         </button>
       </form>
 
