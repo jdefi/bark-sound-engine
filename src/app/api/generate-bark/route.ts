@@ -28,7 +28,7 @@ Example output: A sharp, high-pitched, excited yip of a small terrier echoing in
 Only return the prompt text, nothing else.`;
 
     const geminiResponse = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.0-flash',
       contents: geminiPrompt,
     });
 
